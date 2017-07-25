@@ -53,6 +53,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractClasses\Notified.cs" />
     <Compile Include="Color\ColorUtils.cs" />
     <Compile Include="Controls\Extensions\RichTextBoxExtensions.cs" />
   </ItemGroup>
