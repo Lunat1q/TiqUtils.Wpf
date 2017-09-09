@@ -56,15 +56,18 @@
   <ItemGroup>
     <Compile Include="AbstractClasses\Notified.cs" />
     <Compile Include="Color\ColorUtils.cs" />
+    <Compile Include="Controls\Extensions\CommonExtensions.cs" />
+    <Compile Include="Controls\Extensions\DataGridExtensions.cs" />
+    <Compile Include="Controls\Extensions\DataGrid\DoNotDisplayAttribute.cs" />
+    <Compile Include="Controls\Extensions\DataGrid\LabelNameAttributeBase.cs" />
     <Compile Include="Controls\Extensions\RichTextBoxExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\EnumHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Color\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
