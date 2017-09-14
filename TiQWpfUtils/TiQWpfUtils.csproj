@@ -38,8 +38,14 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MoreLinq, Version=2.6.20831.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
+      <HintPath>..\..\SEOKitBitrix\SEOKitBitrix\packages\morelinq.2.7.0\lib\net40\MoreLinq.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\SEOKitBitrix\SEOKitBitrix\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -63,11 +69,16 @@
     <Compile Include="Controls\Extensions\RichTextBoxExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\PastableDataGrid.cs" />
+    <Compile Include="Helpers\ClipboardHelper.cs" />
+    <Compile Include="Helpers\CsvHelper.cs" />
     <Compile Include="Helpers\EnumHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
