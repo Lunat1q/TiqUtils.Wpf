@@ -7,7 +7,7 @@ namespace TiQWpfUtils.Controls.Extensions.DataGrid
         public abstract string GetProperText();
         public LabelNameAttributeBase(string label)
         {
-            Label = label.ToLower();
+            Label = label;
         }
 
         public string Label { get; }
