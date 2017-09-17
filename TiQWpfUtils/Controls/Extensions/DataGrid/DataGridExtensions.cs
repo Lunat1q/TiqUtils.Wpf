@@ -2,10 +2,9 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Controls;
-using SEOKitBitrix.Classes.Descriptors;
-using TiQWpfUtils.Controls.Extensions.DataGrid;
+using TiQWpfUtils.AbstractClasses.Attributes;
 
-namespace TiQWpfUtils.Controls.Extensions
+namespace TiQWpfUtils.Controls.Extensions.DataGrid
 {
     public static class DataGridExtensions
     {

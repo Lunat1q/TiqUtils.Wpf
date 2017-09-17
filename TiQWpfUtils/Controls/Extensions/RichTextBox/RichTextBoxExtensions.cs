@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
-using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 
-namespace TiQWpfUtils.Controls.Extensions
+namespace TiQWpfUtils.Controls.Extensions.RichTextBox
 {
     public static class RichTextBoxExtensions
     {
         private static readonly Regex UrlRegex = new Regex("(?#Protocol)(?:(?:ht|f)tp(?:s?)\\:\\/\\/|~/|/)?(?#Username:Password)(?:\\w+:\\w+@)?(?#Subdomains)(?:(?:[-\\w]+\\.)+(?#TopLevel Domains)(?:com|org|net|gov|mil|biz|info|mobi|name|aero|jobs|museum|travel|[a-z]{2}))(?#Port)(?::[\\d]{1,5})?(?#Directories)(?:(?:(?:/(?:[-\\w~!$+|.,=]|%[a-f\\d]{2})+)+|/)+|\\?|#)?(?#Query)(?:(?:\\?(?:[-\\w~!$+|.,*:]|%[a-f\\d{2}])+=(?:[-\\w~!$+|.,*:=]|%[a-f\\d]{2})*)(?:&amp;(?:[-\\w~!$+|.,*:]|%[a-f\\d{2}])+=(?:[-\\w~!$+|.,*:=]|%[a-f\\d]{2})*)*)*(?#Anchor)(?:#(?:[-\\w~!$+|.,*:=]|%[a-f\\d]{2})*)?");
         
-        public static void AppendText(this RichTextBox box, string text, System.Windows.Media.Color color)
+        public static void AppendText(this System.Windows.Controls.RichTextBox box, string text, System.Windows.Media.Color color)
         {
             var tr = new TextRange(box.Document.ContentEnd, box.Document.ContentEnd) { Text = text };
             try
@@ -21,7 +20,7 @@ namespace TiQWpfUtils.Controls.Extensions
             catch (FormatException) { }
         }
 
-        public static void AppendParagraph(this RichTextBox box, string text, System.Windows.Media.Color color)
+        public static void AppendParagraph(this System.Windows.Controls.RichTextBox box, string text, System.Windows.Media.Color color)
         {
             var paragraph = new Paragraph();
             paragraph.Inlines.Add(text);

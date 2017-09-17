@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SEOKitBitrix.Classes.Descriptors
+namespace TiQWpfUtils.AbstractClasses.Attributes
 {
     public class DoNotDisplayAttribute : Attribute
     {

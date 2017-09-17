@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using TiQWpfUtils.Controls.Extensions.DataGrid;
+using TiQWpfUtils.AbstractClasses.Attributes;
 
 namespace TiQWpfUtils.Helpers
 {

@@ -63,10 +63,11 @@
     <Compile Include="AbstractClasses\Notified.cs" />
     <Compile Include="Color\ColorUtils.cs" />
     <Compile Include="Controls\Extensions\CommonExtensions.cs" />
-    <Compile Include="Controls\Extensions\DataGridExtensions.cs" />
-    <Compile Include="Controls\Extensions\DataGrid\DoNotDisplayAttribute.cs" />
-    <Compile Include="Controls\Extensions\DataGrid\LabelNameAttributeBase.cs" />
-    <Compile Include="Controls\Extensions\RichTextBoxExtensions.cs" />
+    <Compile Include="Controls\Extensions\DataGrid\DataGridExtensions.cs" />
+    <Compile Include="AbstractClasses\Attributes\DoNotDisplayAttribute.cs" />
+    <Compile Include="AbstractClasses\Attributes\LabelNameAttributeBase.cs" />
+    <Compile Include="Controls\Extensions\DataGrid\DragDropHelper.cs" />
+    <Compile Include="Controls\Extensions\RichTextBox\RichTextBoxExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\PastableDataGrid.cs" />

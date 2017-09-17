@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Reflection;
 using System.Windows.Data;
-using TiQWpfUtils.Controls.Extensions.DataGrid;
+using TiQWpfUtils.AbstractClasses.Attributes;
 
 namespace TiQWpfUtils.Converters
 {

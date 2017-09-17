@@ -1,11 +1,12 @@
 ﻿using System;
 
-namespace TiQWpfUtils.Controls.Extensions.DataGrid
+namespace TiQWpfUtils.AbstractClasses.Attributes
 {
     public abstract class LabelNameAttributeBase : Attribute
     {
         public abstract string GetProperText();
-        public LabelNameAttributeBase(string label)
+
+        protected LabelNameAttributeBase(string label)
         {
             Label = label;
         }
