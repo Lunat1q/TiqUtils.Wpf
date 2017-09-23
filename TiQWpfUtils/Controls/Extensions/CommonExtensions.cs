@@ -20,7 +20,7 @@ namespace TiQWpfUtils.Controls.Extensions
             return FindParent<T>(parentObject);
         }
 
-        public static T FindChild<T>(this DependencyObject parent, string childName)
+        public static T FindChild<T>(this DependencyObject parent, string childName = "")
             where T : DependencyObject
         {
             // Confirm parent and childName are valid. 
@@ -46,7 +46,7 @@ namespace TiQWpfUtils.Controls.Extensions
                 {
                     var frameworkElement = child as FrameworkElement;
                     // If the child's name is set for search
-                    if (frameworkElement != null && frameworkElement.Name == childName)
+                    if (frameworkElement != null && (frameworkElement.Name == childName || childName == ""))
                     {
                         // if the child's name is of the request name
                         foundChild = (T)child;

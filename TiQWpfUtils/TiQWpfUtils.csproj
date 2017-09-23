@@ -73,6 +73,7 @@
     <Compile Include="Controls\PastableDataGrid.cs" />
     <Compile Include="Converters\EnumToCollectionConverter.cs" />
     <Compile Include="Converters\GetLabelForEnum.cs" />
+    <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Helpers\ClipboardHelper.cs" />
     <Compile Include="Helpers\CsvHelper.cs" />
     <Compile Include="Helpers\EnumHelper.cs" />
