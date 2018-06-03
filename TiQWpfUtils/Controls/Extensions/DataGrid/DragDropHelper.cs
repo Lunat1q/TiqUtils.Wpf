@@ -100,8 +100,15 @@ namespace TiQWpfUtils.Controls.Extensions.DataGrid
                 //remove the source from the list
                 list.Remove(draggeditem);
 
-                //move source at the target's location
-                list.Insert(targetIndex, draggeditem);
+                try
+                {
+                    //move source at the target's location
+                    list.Insert(targetIndex, draggeditem);
+                }
+                catch
+                {
+                    //ignore
+                }
             }
         }
 
