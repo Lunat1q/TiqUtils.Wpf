@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
+using System.IO;
+using System.Text;
+using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Markup;
 
 namespace TiQWpfUtils.Controls.Extensions.RichTextBox
 {
-    using System.IO;
-    using System.Text;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Documents;
     public class RichTextBoxHelper : DependencyObject
     {
-        private static HashSet<Thread> _recursionProtection = new HashSet<Thread>();
+        private static List<Guid> _recursionProtection = new List<Guid>();
 
         public static string GetDocumentXaml(DependencyObject obj)
         {
@@ -21,9 +19,12 @@ namespace TiQWpfUtils.Controls.Extensions.RichTextBox
 
         public static void SetDocumentXaml(DependencyObject obj, string value)
         {
-            _recursionProtection.Add(Thread.CurrentThread);
+            var fw1 = (FrameworkElement)obj;
+            if (fw1.Tag == null || (Guid)fw1.Tag == Guid.Empty)
+                fw1.Tag = Guid.NewGuid();
+            _recursionProtection.Add((Guid)fw1.Tag);
             obj.SetValue(DocumentXamlProperty, value);
-            _recursionProtection.Remove(Thread.CurrentThread);
+            _recursionProtection.Remove((Guid)fw1.Tag);
         }
 
         public static readonly DependencyProperty DocumentXamlProperty = DependencyProperty.RegisterAttached(
@@ -33,18 +34,28 @@ namespace TiQWpfUtils.Controls.Extensions.RichTextBox
             new FrameworkPropertyMetadata(
                 "",
                 FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
-                (obj, e) => {
-                    if (_recursionProtection.Contains(Thread.CurrentThread))
+                (obj, e) =>
+                {
+                    var richTextBox = (System.Windows.Controls.RichTextBox)obj;
+                    if (richTextBox.Tag != null && _recursionProtection.Contains((Guid)richTextBox.Tag))
                         return;
 
-                    var richTextBox = (RichTextBox)obj;
 
                     // Parse the XAML to a document (or use XamlReader.Parse())
 
                     try
                     {
-                        var stream = new MemoryStream(Encoding.UTF8.GetBytes(GetDocumentXaml(richTextBox)));
-                        var doc = (FlowDocument)XamlReader.Load(stream);
+                        string docXaml = GetDocumentXaml(richTextBox);
+                        var stream = new MemoryStream(Encoding.UTF8.GetBytes(docXaml));
+                        FlowDocument doc;
+                        if (!string.IsNullOrEmpty(docXaml))
+                        {
+                            doc = (FlowDocument)XamlReader.Load(stream);
+                        }
+                        else
+                        {
+                            doc = new FlowDocument();
+                        }
 
                         // Set the document
                         richTextBox.Document = doc;
@@ -57,8 +68,10 @@ namespace TiQWpfUtils.Controls.Extensions.RichTextBox
                     // When the document changes update the source
                     richTextBox.TextChanged += (obj2, e2) =>
                     {
-                        var richTextBox2 = obj2 as RichTextBox;
-                        if (obj2 is RichTextBox)
+#pragma warning disable IDE0019 // Use pattern matching
+                        var richTextBox2 = obj2 as System.Windows.Controls.RichTextBox;
+#pragma warning restore IDE0019 // Use pattern matching
+                        if (richTextBox2 != null)
                         {
                             SetDocumentXaml(richTextBox, XamlWriter.Save(richTextBox2.Document));
                         }
