@@ -70,6 +70,7 @@
     <Compile Include="Controls\Extensions\DataGrid\DragDropHelper.cs" />
     <Compile Include="Controls\Extensions\RichTextBox\RichTextBoxExtensions.cs" />
     <Compile Include="Controls\Extensions\RichTextBox\RichTextBoxHelper.cs" />
+    <Compile Include="Converters\EnumValueConverter.cs" />
     <Compile Include="Screen\DpiHelper.cs" />
     <Compile Include="Screen\ProcessDpiAwareness.cs" />
     <Compile Include="TypeSpeccific\Image.cs" />
