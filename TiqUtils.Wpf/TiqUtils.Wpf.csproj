@@ -74,10 +74,13 @@
     <Compile Include="Screen\DpiHelper.cs" />
     <Compile Include="Screen\ProcessDpiAwareness.cs" />
     <Compile Include="TypeSpeccific\Image.cs" />
-    <Compile Include="UIBuilders\DataMemberAttribute.cs" />
+    <Compile Include="UIBuilders\AutoUIExtensions.cs" />
+    <Compile Include="UIBuilders\PropertyMemberAttribute.cs" />
+    <Compile Include="UIBuilders\PropertyOrderAttribute.cs" />
     <Compile Include="UIBuilders\Proxy\NotifyPropertyChangedProxy.cs" />
     <Compile Include="UIBuilders\SettingsAutoUI.cs" />
     <Compile Include="UIBuilders\SliderLimitsAttribute.cs" />
+    <Compile Include="UIBuilders\TypeHelper.cs" />
     <Compile Include="UIBuilders\UIBuilderAttribute.cs" />
   </ItemGroup>
   <ItemGroup>

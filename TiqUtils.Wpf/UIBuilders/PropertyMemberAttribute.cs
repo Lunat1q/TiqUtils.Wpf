@@ -2,7 +2,7 @@
 
 namespace TiqUtils.Wpf.UIBuilders
 {
-    public class DataMemberAttribute : Attribute
+    public class PropertyMemberAttribute : Attribute
     {
     }
 }

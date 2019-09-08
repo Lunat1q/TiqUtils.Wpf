@@ -4,13 +4,23 @@ namespace TiqUtils.Wpf.UIBuilders
 {
     public class SliderLimitsAttribute : Attribute
     {
-        public int Min { get; }
-        public int Max { get; }
+        public float Min { get; }
 
-        public SliderLimitsAttribute(int min, int max)
+        public float Max { get; }
+
+        public int ToolTipPrecision { get; }
+
+        public float TickFrequency { get; }
+
+        public float LargeChange { get; }
+
+        public SliderLimitsAttribute(float min, float max, int toolTipPrecision = 1, float tickFrequency = 0.1f, float largeChange = 0.1f)
         {
-            Min = min;
-            Max = max;
+            this.Min = min;
+            this.Max = max;
+            this.ToolTipPrecision = toolTipPrecision;
+            this.TickFrequency = tickFrequency;
+            this.LargeChange = largeChange;
         }
     }
 }

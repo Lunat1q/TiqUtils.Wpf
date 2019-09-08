@@ -3,11 +3,13 @@
 namespace TiqUtils.Wpf.UIBuilders
 {
     // ReSharper disable once InconsistentNaming
-    internal sealed class UIBuilderAttribute : Attribute
+    public sealed class UIBuilderAttribute : Attribute
     {
-        public UIBuilderAttribute(string keyBindingSettingsName)
+        public string BuilderTypeName { get; }
+
+        public UIBuilderAttribute(string builderTypeName)
         {
-            throw new NotImplementedException();
+            BuilderTypeName = builderTypeName;
         }
     }
 }

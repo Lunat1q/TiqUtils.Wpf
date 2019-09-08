@@ -2,11 +2,13 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
+using System.Windows.Interop;
 using TiqUtils.Wpf.Converters;
 using TiqUtils.Wpf.Helpers;
 using TiqUtils.Wpf.UIBuilders.Proxy;
@@ -19,7 +21,7 @@ namespace TiqUtils.Wpf.UIBuilders
         private readonly object _settings;
         private Grid _settingsGrid;
 
-        public SettingsAutoUI(object settingsClass)
+        protected internal SettingsAutoUI(object settingsClass)
         {
             _settings = settingsClass;
             InitializeComponent();
@@ -50,7 +52,7 @@ namespace TiqUtils.Wpf.UIBuilders
 
             baseGrid.Children.Add(closeButton);
 
-            this.Content = baseGrid;
+            Content = baseGrid;
         }
 
         private void CloseButtonOnClick(object sender, RoutedEventArgs e)
@@ -70,12 +72,12 @@ namespace TiqUtils.Wpf.UIBuilders
 
         private void GenerateBindingControllers()
         {
-            var properties = this.GetObjectType().GetProperties();
+            var properties = GetObjectType().GetProperties();
             var grid = new Grid();
-            grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Auto });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
             grid.ColumnDefinitions.Add(new ColumnDefinition());
             var rowIdx = 0;
-            foreach (var prop in properties.Where(x => x.GetCustomAttribute<DataMemberAttribute>() != null))
+            foreach (var prop in properties.Where(x => x.GetCustomAttribute<PropertyMemberAttribute>() != null).OrderBy(x => x.GetCustomAttribute<PropertyOrderAttribute>()?.Order ?? 999))
             {
                 grid.RowDefinitions.Add(new RowDefinition());
                 var nameAttribute = prop.GetCustomAttribute<DisplayNameAttribute>();
@@ -85,28 +87,7 @@ namespace TiqUtils.Wpf.UIBuilders
                 Grid.SetColumn(text, 0);
                 Grid.SetRow(text, rowIdx);
 
-                UIElement e;
-
-                switch (prop.PropertyType)
-                {
-                    case Type _ when prop.PropertyType == typeof(bool):
-                        e = CreateBooleanController(prop);
-                        break;
-                    case Type _ when prop.PropertyType.IsEnum:
-                        e = CreateEnumController(prop);
-                        break;
-                    case Type _ when prop.PropertyType.IsClass:
-                        e = CreateSettingsClassController(GetPropertyValue(prop));
-                        break;
-                    case Type _ when prop.PropertyType == typeof(double):
-                        e = CreateDoubleController(prop);
-                        break;
-                    case Type _ when prop.PropertyType == typeof(int):
-                        e = CreateIntController(prop);
-                        break;
-                    default:
-                        throw new NotImplementedException();
-                }
+                var e = CreatePropertyUiElement(text, prop);
 
                 Grid.SetColumn(e, 1);
                 Grid.SetRow(e, rowIdx);
@@ -115,6 +96,52 @@ namespace TiqUtils.Wpf.UIBuilders
             }
 
             _settingsGrid.Children.Add(grid);
+        }
+
+        protected virtual UIElement CreatePropertyUiElement(TextBlock labelTextBlock, PropertyInfo prop)
+        {
+            UIElement e;
+
+            switch (prop.PropertyType)
+            {
+                case Type _ when prop.PropertyType == typeof(bool):
+                    e = CreateBooleanController(prop);
+                    break;
+                case Type _ when prop.PropertyType.IsEnum:
+                    e = CreateEnumController(prop);
+                    break;
+                case Type _ when prop.PropertyType == typeof(double):
+                case Type _ when prop.PropertyType == typeof(float):
+                    e = CreateDoubleController(prop);
+                    break;
+                case Type _ when prop.PropertyType == typeof(int):
+                    e = CreateIntController(prop);
+                    break;
+                case Type _ when prop.PropertyType == typeof(string):
+                    e = CreateTextBlockController(prop);
+                    break;
+                case Type _ when prop.PropertyType.IsClass:
+                    e = CreateSettingsClassController(GetPropertyValue(prop));
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
+
+            return e;
+        }
+
+        protected virtual TextBox CreateTextBlockController(PropertyInfo prop)
+        {
+            var ret = new TextBox
+            {
+                VerticalAlignment = VerticalAlignment.Center
+            };
+            var valueBinding = new Binding
+            {
+                Path = new PropertyPath(prop.Name, Array.Empty<object>())
+            };
+            ret.SetBinding(TextBox.TextProperty, valueBinding);
+            return ret;
         }
 
         private object GetPropertyValue(PropertyInfo prop)
@@ -126,7 +153,7 @@ namespace TiqUtils.Wpf.UIBuilders
             return prop.GetValue(_settings);
         }
 
-        private static string GetBeautyPropName(PropertyInfo prop)
+        protected virtual string GetBeautyPropName(PropertyInfo prop)
         {
             var name = prop.Name;
             var sb = new StringBuilder();
@@ -147,14 +174,25 @@ namespace TiqUtils.Wpf.UIBuilders
             return sb.ToString();
         }
 
-        private void InitWindowSettings()
+        protected virtual void InitWindowSettings()
         {
-            var type = this.GetObjectType();
+            var type = GetObjectType();
             var formName = type.GetCustomAttribute<DisplayNameAttribute>();
-            this.Title = formName?.DisplayName ?? type.Name;
-            this.MinWidth = 300;
-            this.MinHeight = 100;
-            this.SizeToContent = SizeToContent.WidthAndHeight;
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            Topmost = true;
+            Title = formName?.DisplayName ?? type.Name;
+            MinWidth = 300.0;
+            MinHeight = 100.0;
+            SizeToContent = SizeToContent.WidthAndHeight;
+            ResizeMode = ResizeMode.NoResize;
+            WindowStyle = WindowStyle.ToolWindow;
+            Loaded += SettingsAutoUI_Loaded;
+        }
+
+        private void SettingsAutoUI_Loaded(object sender, RoutedEventArgs e)
+        {
+            var hWnd = new WindowInteropHelper(this).Handle;
+            SetWindowLong(hWnd, GWL_STYLE, GetWindowLong(hWnd, GWL_STYLE) & WS_SYSMENU);
         }
 
         public static Button CreateSettingsClassController(object obj, string buttonText = "Open")
@@ -183,7 +221,7 @@ namespace TiqUtils.Wpf.UIBuilders
             return button;
         }
 
-        private static ComboBox CreateEnumController(PropertyInfo prop)
+        protected virtual ComboBox CreateEnumController(PropertyInfo prop)
         {
             var cb = new ComboBox
             {
@@ -207,7 +245,7 @@ namespace TiqUtils.Wpf.UIBuilders
             return cb;
         }
 
-        private static CheckBox CreateBooleanController(PropertyInfo prop)
+        protected virtual CheckBox CreateBooleanController(PropertyInfo prop)
         {
             var cb = new CheckBox
             {
@@ -222,7 +260,7 @@ namespace TiqUtils.Wpf.UIBuilders
             return cb;
         }
 
-        private static Slider CreateDoubleController(PropertyInfo prop)
+        protected virtual Slider CreateDoubleController(PropertyInfo prop)
         {
             var limits = prop.GetCustomAttribute<SliderLimitsAttribute>();
             var ret = new Slider
@@ -242,18 +280,46 @@ namespace TiqUtils.Wpf.UIBuilders
             return ret;
         }
 
-        private static TextBox CreateIntController(PropertyInfo prop)
+        protected virtual UIElement CreateIntController(PropertyInfo prop)
         {
-            var ret = new TextBox
+            var limits = prop.GetCustomAttribute<SliderLimitsAttribute>();
+            UIElement result;
+            if (limits != null)
             {
-                VerticalAlignment = VerticalAlignment.Center
-            };
-            var valueBinding = new Binding
+                var slider = new Slider
+                {
+                    AutoToolTipPlacement = AutoToolTipPlacement.TopLeft,
+                    Maximum = limits.Max,
+                    Minimum = limits.Min,
+                    TickFrequency = (int)limits.TickFrequency,
+                    LargeChange = (int)limits.LargeChange,
+                    AutoToolTipPrecision = 0,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+                var valueBinding = new Binding
+                {
+                    Path = new PropertyPath(prop.Name)
+                };
+                slider.SetBinding(RangeBase.ValueProperty, valueBinding);
+                result = slider;
+            }
+            else
             {
-                Path = new PropertyPath(prop.Name)
-            };
-            ret.SetBinding(TextBox.TextProperty, valueBinding);
-            return ret;
+                result = CreateTextBlockController(prop);
+            }
+            return result;
         }
+
+        #region PInvoke
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+
+        [DllImport("user32.dll")]
+        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+
+        private const int GWL_STYLE = -16;
+
+        private const int WS_SYSMENU = -524288;
+        #endregion
     }
 }
