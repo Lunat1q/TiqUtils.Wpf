@@ -45,7 +45,8 @@ namespace TiqUtils.Wpf.UIBuilders
 
             var closeButton = new Button
             {
-                Content = "Close"
+                Content = "Close",
+                Margin = new Thickness(0, 5, 0, 5)
             };
             closeButton.Click += CloseButtonOnClick;
             Grid.SetRow(closeButton, 1);
@@ -76,23 +77,60 @@ namespace TiqUtils.Wpf.UIBuilders
             var grid = new Grid();
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
             grid.ColumnDefinitions.Add(new ColumnDefinition());
-            var rowIdx = 0;
-            foreach (var prop in properties.Where(x => x.GetCustomAttribute<PropertyMemberAttribute>() != null).OrderBy(x => x.GetCustomAttribute<PropertyOrderAttribute>()?.Order ?? 999))
+            var mainGridIdx = 0;
+            foreach (var propGroup in properties
+                .Where(x => x.GetCustomAttribute<PropertyMemberAttribute>() != null)
+                .OrderBy(x => x.GetCustomAttribute<PropertyOrderAttribute>()?.Order ?? 999)
+                .GroupBy(x => x.GetCustomAttribute<PropertyGroupAttribute>()?.GroupName))
             {
-                grid.RowDefinitions.Add(new RowDefinition());
-                var nameAttribute = prop.GetCustomAttribute<DisplayNameAttribute>();
-                var name = nameAttribute?.DisplayName ?? GetBeautyPropName(prop);
-                var text = new TextBlock { Text = name, Margin = new Thickness(5) };
-                grid.Children.Add(text);
-                Grid.SetColumn(text, 0);
-                Grid.SetRow(text, rowIdx);
+                var curIdx = 0;
+                var isGroup = !string.IsNullOrWhiteSpace(propGroup.Key);
+                var parentGrid = grid;
+                if (isGroup)
+                {
+                    var gb = new GroupBox
+                    {
+                        Header = propGroup.Key,
+                        Margin = new Thickness(0, 0, 0, 5)
+                    };
+                    var groupGrid = new Grid();
+                    gb.Content = groupGrid;
+                    grid.RowDefinitions.Add(new RowDefinition());
+                    grid.Children.Add(gb);
+                    Grid.SetColumn(gb, 0);
+                    Grid.SetRow(gb, mainGridIdx++);
+                    Grid.SetColumnSpan(gb, 2);
+                    groupGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+                    groupGrid.ColumnDefinitions.Add(new ColumnDefinition());
+                    parentGrid = groupGrid;
+                }
+                else
+                {
+                    curIdx = mainGridIdx;
+                }
 
-                var e = CreatePropertyUiElement(text, prop);
+                foreach (var prop in propGroup)
+                {
+                    parentGrid.RowDefinitions.Add(new RowDefinition());
+                    var nameAttribute = prop.GetCustomAttribute<DisplayNameAttribute>();
+                    var name = nameAttribute?.DisplayName ?? GetBeautyPropName(prop);
+                    var text = new TextBlock { Text = name, Margin = new Thickness(5) };
+                    parentGrid.Children.Add(text);
+                    Grid.SetColumn(text, 0);
+                    Grid.SetRow(text, curIdx);
 
-                Grid.SetColumn(e, 1);
-                Grid.SetRow(e, rowIdx);
-                grid.Children.Add(e);
-                rowIdx++;
+                    var e = CreatePropertyUiElement(text, prop);
+
+                    Grid.SetColumn(e, 1);
+                    Grid.SetRow(e, curIdx);
+                    parentGrid.Children.Add(e);
+                    curIdx++;
+                }
+
+                if (!isGroup)
+                {
+                    mainGridIdx = curIdx;
+                }
             }
 
             _settingsGrid.Children.Add(grid);

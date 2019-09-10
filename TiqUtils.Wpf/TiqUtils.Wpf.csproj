@@ -75,6 +75,7 @@
     <Compile Include="Screen\ProcessDpiAwareness.cs" />
     <Compile Include="TypeSpeccific\Image.cs" />
     <Compile Include="UIBuilders\AutoUIExtensions.cs" />
+    <Compile Include="UIBuilders\PropertyGroupAttribute.cs" />
     <Compile Include="UIBuilders\PropertyMemberAttribute.cs" />
     <Compile Include="UIBuilders\PropertyOrderAttribute.cs" />
     <Compile Include="UIBuilders\Proxy\NotifyPropertyChangedProxy.cs" />
