@@ -230,7 +230,7 @@ namespace TiqUtils.Wpf.UIBuilders
         private void SettingsAutoUI_Loaded(object sender, RoutedEventArgs e)
         {
             var hWnd = new WindowInteropHelper(this).Handle;
-            SetWindowLong(hWnd, GWL_STYLE, GetWindowLong(hWnd, GWL_STYLE) & WS_SYSMENU);
+            SetWindowLong(hWnd, GwlStyle, GetWindowLong(hWnd, GwlStyle) & ~WsSysMenu);
         }
 
         public static Button CreateSettingsClassController(object obj, string buttonText = "Open")
@@ -355,9 +355,9 @@ namespace TiqUtils.Wpf.UIBuilders
         [DllImport("user32.dll")]
         private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
-        private const int GWL_STYLE = -16;
+        private const int GwlStyle = -16;
 
-        private const int WS_SYSMENU = -524288;
+        private const int WsSysMenu = 0x80000;
         #endregion
     }
 }
