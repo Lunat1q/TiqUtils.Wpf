@@ -38,7 +38,7 @@ namespace TiqUtils.Wpf.Helpers
             };
 
 
-            var bestBet = listOfLineSeparatorAndThereFirstLineSeparatedValueCount.MaxBy((n) => n.Item2);
+            var bestBet = listOfLineSeparatorAndThereFirstLineSeparatedValueCount.MaxBy((n) => n.Item2).First();
 
             if (bestBet != null && bestBet.Item2 > 1)
             {
