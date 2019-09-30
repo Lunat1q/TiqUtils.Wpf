@@ -18,12 +18,12 @@ namespace TiqUtils.Wpf.UIBuilders
     // ReSharper disable once InconsistentNaming
     public class SettingsAutoUI : Window
     {
-        private readonly object _settings;
+        protected readonly object Settings;
         private Grid _settingsGrid;
 
         protected internal SettingsAutoUI(object settingsClass)
         {
-            _settings = settingsClass;
+            this.Settings = settingsClass;
             InitializeComponent();
             GenerateBindingControllers();
             DataContext = settingsClass;
@@ -63,12 +63,12 @@ namespace TiqUtils.Wpf.UIBuilders
 
         private Type GetObjectType()
         {
-            if (_settings is NotifyPropertyChangedProxy proxy)
+            if (this.Settings is NotifyPropertyChangedProxy proxy)
             {
                 return proxy.GetWrappedType();
             }
 
-            return _settings.GetType();
+            return this.Settings.GetType();
         }
 
         private void GenerateBindingControllers()
@@ -114,7 +114,7 @@ namespace TiqUtils.Wpf.UIBuilders
                     parentGrid.RowDefinitions.Add(new RowDefinition());
                     var nameAttribute = prop.GetCustomAttribute<DisplayNameAttribute>();
                     var name = nameAttribute?.DisplayName ?? GetBeautyPropName(prop);
-                    var text = new TextBlock { Text = name, Margin = new Thickness(5) };
+                    var text = CreateLabel(name);
                     parentGrid.Children.Add(text);
                     Grid.SetColumn(text, 0);
                     Grid.SetRow(text, curIdx);
@@ -134,6 +134,17 @@ namespace TiqUtils.Wpf.UIBuilders
             }
 
             _settingsGrid.Children.Add(grid);
+            this.AfterBuild(grid);
+        }
+
+        protected static TextBlock CreateLabel(string name)
+        {
+            return new TextBlock { Text = name, Margin = new Thickness(5) };
+        }
+
+        protected virtual void AfterBuild(Grid grid)
+        {
+            // to be overriden
         }
 
         protected virtual UIElement CreatePropertyUiElement(TextBlock labelTextBlock, PropertyInfo prop)
@@ -184,11 +195,11 @@ namespace TiqUtils.Wpf.UIBuilders
 
         private object GetPropertyValue(PropertyInfo prop)
         {
-            if (_settings is NotifyPropertyChangedProxy proxy)
+            if (this.Settings is NotifyPropertyChangedProxy proxy)
             {
                 return prop.GetValue(proxy.WrappedObject);
             }
-            return prop.GetValue(_settings);
+            return prop.GetValue(this.Settings);
         }
 
         protected virtual string GetBeautyPropName(PropertyInfo prop)
@@ -233,13 +244,18 @@ namespace TiqUtils.Wpf.UIBuilders
             SetWindowLong(hWnd, GwlStyle, GetWindowLong(hWnd, GwlStyle) & ~WsSysMenu);
         }
 
-        public static Button CreateSettingsClassController(object obj, string buttonText = "Open")
+        protected static Button CreateButton(string buttonText)
         {
-            var button = new Button
+            return new Button
             {
                 Content = buttonText,
                 Margin = new Thickness(5)
             };
+        }
+
+        public static Button CreateSettingsClassController(object obj, string buttonText = "Open")
+        {
+            var button = CreateButton(buttonText);
 
             button.Click += (sender, args) =>
             {
