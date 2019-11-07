@@ -38,7 +38,7 @@ namespace TiqUtils.Wpf.UIBuilders
                 Margin = new Thickness(5)
             };
             baseGrid.RowDefinitions.Add(new RowDefinition());
-            baseGrid.RowDefinitions.Add(new RowDefinition());
+            baseGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
             _settingsGrid = new Grid();
             baseGrid.Children.Add(_settingsGrid);
@@ -95,7 +95,7 @@ namespace TiqUtils.Wpf.UIBuilders
                     };
                     var groupGrid = new Grid();
                     gb.Content = groupGrid;
-                    grid.RowDefinitions.Add(new RowDefinition());
+                    grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
                     grid.Children.Add(gb);
                     Grid.SetColumn(gb, 0);
                     Grid.SetRow(gb, mainGridIdx++);
@@ -111,7 +111,7 @@ namespace TiqUtils.Wpf.UIBuilders
 
                 foreach (var prop in propGroup)
                 {
-                    parentGrid.RowDefinitions.Add(new RowDefinition());
+                    parentGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
                     var nameAttribute = prop.GetCustomAttribute<DisplayNameAttribute>();
                     var name = nameAttribute?.DisplayName ?? GetBeautyPropName(prop);
                     var text = CreateLabel(name);
