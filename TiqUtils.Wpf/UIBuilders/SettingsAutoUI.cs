@@ -166,6 +166,7 @@ namespace TiqUtils.Wpf.UIBuilders
                 case Type _ when prop.PropertyType == typeof(int):
                     e = CreateIntController(prop);
                     break;
+                case Type _ when prop.PropertyType == typeof(char):
                 case Type _ when prop.PropertyType == typeof(string):
                     e = CreateTextBlockController(prop);
                     break;
