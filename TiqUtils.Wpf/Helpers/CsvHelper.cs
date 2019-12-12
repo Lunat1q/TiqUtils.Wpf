@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using MoreLinq;
-
 namespace TiqUtils.Wpf.Helpers
 {
     public static class CsvHelper
@@ -37,8 +35,9 @@ namespace TiqUtils.Wpf.Helpers
                 new Tuple<LineSeparator, int>(LineSeparator.Comma, ParseLineCommaSeparated(oneLine).Length)
             };
 
+            var maxItem2 = listOfLineSeparatorAndThereFirstLineSeparatedValueCount.Max(x => x.Item2);
 
-            var bestBet = listOfLineSeparatorAndThereFirstLineSeparatedValueCount.MaxBy((n) => n.Item2).First();
+            var bestBet = listOfLineSeparatorAndThereFirstLineSeparatedValueCount.FirstOrDefault(x => x.Item2 == maxItem2);
 
             if (bestBet != null && bestBet.Item2 > 1)
             {
