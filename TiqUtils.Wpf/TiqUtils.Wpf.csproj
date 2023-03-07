@@ -1,103 +1,15 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B03903AE-CB73-4DAB-91D8-439F4AAD4806}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>TiqUtils.Wpf</RootNamespace>
-    <AssemblyName>TiqUtils.Wpf</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath Condition="Exists('..\packages\System.ValueTuple.4.5.0\lib\')">..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
-      <HintPath Condition="Exists('..\..\packages\System.ValueTuple.4.5.0\lib\')">..\..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AbstractClasses\Notified.cs" />
-    <Compile Include="Color\ColorUtils.cs" />
-    <Compile Include="Controls\Extensions\CommonExtensions.cs" />
-    <Compile Include="Controls\Extensions\DataGrid\DataGridExtensions.cs" />
-    <Compile Include="AbstractClasses\Attributes\DoNotDisplayAttribute.cs" />
-    <Compile Include="AbstractClasses\Attributes\LabelNameAttributeBase.cs" />
-    <Compile Include="Controls\Extensions\DataGrid\DragDropHelper.cs" />
-    <Compile Include="Controls\Extensions\RichTextBox\RichTextBoxExtensions.cs" />
-    <Compile Include="Controls\Extensions\RichTextBox\RichTextBoxHelper.cs" />
-    <Compile Include="Converters\EnumValueConverter.cs" />
-    <Compile Include="Screen\DpiHelper.cs" />
-    <Compile Include="Screen\ProcessDpiAwareness.cs" />
-    <Compile Include="TypeSpeccific\Image.cs" />
-    <Compile Include="UIBuilders\AutoUIExtensions.cs" />
-    <Compile Include="UIBuilders\PropertyGroupAttribute.cs" />
-    <Compile Include="UIBuilders\PropertyMemberAttribute.cs" />
-    <Compile Include="UIBuilders\PropertyOrderAttribute.cs" />
-    <Compile Include="UIBuilders\Proxy\NotifyPropertyChangedProxy.cs" />
-    <Compile Include="UIBuilders\SettingsAutoControl.cs" />
-    <Compile Include="UIBuilders\SettingsAutoUI.cs" />
-    <Compile Include="UIBuilders\SliderLimitsAttribute.cs" />
-    <Compile Include="UIBuilders\TypeHelper.cs" />
-    <Compile Include="UIBuilders\UIBuilderAttribute.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Controls\PastableDataGrid.cs" />
-    <Compile Include="Converters\EnumToCollectionConverter.cs" />
-    <Compile Include="Converters\GetLabelForEnum.cs" />
-    <Compile Include="Converters\InverseBooleanConverter.cs" />
-    <Compile Include="Helpers\ClipboardHelper.cs" />
-    <Compile Include="Helpers\CsvHelper.cs" />
-    <Compile Include="Helpers\EnumHelper.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-  </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
+  </ItemGroup>
 </Project>
