@@ -39,6 +39,20 @@ namespace TiqUtils.Wpf.UIBuilders
             return settingsPage;
         }
 
+        // ReSharper disable once InconsistentNaming
+        public static SettingsAutoControl CreateAutoSettingsControl(this object obj, Panel parentControl)
+        {
+            var builderName = GetBuilderClassName(obj);
+
+            if (!string.IsNullOrWhiteSpace(builderName))
+            {
+                return TypeHelper.CreateClassOfTypeByName<SettingsAutoControl>(builderName, obj);
+            }
+
+            var settingsPage = new SettingsAutoControl(obj, parentControl);
+            return settingsPage;
+        }
+
         private static string GetBuilderClassName(object o)
         {
             if (o is NotifyPropertyChangedProxy p)
@@ -48,7 +62,7 @@ namespace TiqUtils.Wpf.UIBuilders
 
             var uiBuilderAttribute = o.GetType().GetCustomAttribute<UIBuilderAttribute>();
 
-            return uiBuilderAttribute.BuilderTypeName ?? "";
+            return uiBuilderAttribute?.BuilderTypeName ?? "";
         }
     }
 }
